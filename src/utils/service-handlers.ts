@@ -14,6 +14,7 @@ import {
   getInitialNotification,
   setBackgroundMessageHandler,
   AuthorizationStatus,
+  registerDeviceForRemoteMessages,
 } from '@react-native-firebase/messaging';
 import {navigate} from '../navigation/navigation';
 import {filterAppointment} from './common-functions';
@@ -120,7 +121,8 @@ export const requestUserPermission = async () => {
     const hasPermission = await PermissionsAndroid.check(
       PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
     );
-
+    console.log('permission', hasPermission);
+    
     if (!hasPermission) {
       const status = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
@@ -141,14 +143,16 @@ export const requestUserPermission = async () => {
     }
   }
 
-  const messaging = getMessaging();
+  const messaging = await getMessaging();
 
   const authStatus = await requestPermission(messaging);
   const enabled =
-    authStatus === AuthorizationStatus.AUTHORIZED ||
-    authStatus === AuthorizationStatus.PROVISIONAL;
+  authStatus === AuthorizationStatus.AUTHORIZED ||
+  authStatus === AuthorizationStatus.PROVISIONAL;
   if (enabled) {
+    // await registerDeviceForRemoteMessages(messaging)
     const token = await getToken(messaging);
+    console.log('called',token);
   }
 };
 
@@ -252,7 +256,7 @@ export const setupNotificationListeners = () => {
         console.log('filtered appointment', data);
 
         navigate('MyAppointmentDetails', {
-          appointmentData: {...data, prescription: true},
+          appointmentData: {...data, openPrescription: true},
         });
         // navigate('MyAppointmentDetails', { appointmentData: {...data, join: true} });
       } catch (e) {

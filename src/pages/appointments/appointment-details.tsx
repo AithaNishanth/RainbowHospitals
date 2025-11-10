@@ -46,6 +46,8 @@ const MyAppointmentDetails: React.FC<any> = ({route}) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const {appointmentData, cancel, vitalsUpload} = route.params;
+  console.log(appointmentData?.prescription);
+  
   const dateTime = moment().format();
 
   const [visible, setVisible] = React.useState(cancel || false);
@@ -118,7 +120,7 @@ const MyAppointmentDetails: React.FC<any> = ({route}) => {
   }, []);
 
   useEffect(() => {
-    if (appointmentData?.prescription) {
+    if (appointmentData?.openPrescription) {
       navigation.navigate(routes.PDFPreview, {
         source: {
           uri: `${API_IMG_URL}${appointmentData?.prescription_file}`,

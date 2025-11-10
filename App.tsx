@@ -7,8 +7,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Provider as PaperProvider} from 'react-native-paper';
 import notifee, {AndroidImportance} from '@notifee/react-native';
-import {getMessaging, getToken} from '@react-native-firebase/messaging';
+import {getMessaging, getToken, registerDeviceForRemoteMessages} from '@react-native-firebase/messaging';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+
 
 import './src/i18n';
 
@@ -37,6 +38,15 @@ import {AuthStack, MainStack, navigationRef} from './src/navigation/navigation';
 // Initialize RTL
 configureRTL();
 
+const firebaseConfig = {
+  apiKey: "AIzaSyBFX4-xveNqcNN9rq0G4Et94iPVMd8THGM",
+  authDomain: "rainbow-hospitals-88c02.firebaseapp.com",
+  projectId: "rainbow-hospitals-88c02",
+  storageBucket: "rainbow-hospitals-88c02.firebasestorage.app",
+  messagingSenderId: "686287175369",
+  appId: "1:686287175369:ios:7d30fc3e89ffc281b81718",
+};
+
 const App: React.FC = () => {
   const [booting, setBooting] = useState(true);
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -46,6 +56,7 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    
     const requestUserPermissions = async () => {
       await requestUserPermission();
       try {
@@ -54,7 +65,6 @@ const App: React.FC = () => {
         await AsyncStorage.setItem('FcmTtoken', FcmTtoken);
       } catch (error) {
         console.log(error);
-
         requestUserPermissions();
       }
     };
