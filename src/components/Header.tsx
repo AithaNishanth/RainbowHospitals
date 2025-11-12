@@ -514,20 +514,20 @@ const Header = forwardRef<any, HeaderProps>(
                   {mainPatient?.PatientName ?? 'Fetching User...'}
                 </Text>
                 <View style={styles.locationInfo}>
-                  <Image source={images.map} style={styles.mapIcon} />
-                  {/* <Text
+                  {/* <Image source={images.map} style={styles.mapIcon} />
+                  <Text
                     numberOfLines={1}
                     style={[styles.regionText, {width: '25%'}]}>
                     {`${branch?.name},` || 'loading...'}
                   </Text> */}
                   <Text style={styles.regionText}>
-                    {`${branch?.name}` || 'Fetching...'}
+                    {`${mainPatient?.PatientID}` || 'Fetching...'}
                   </Text>
-                  <FontAwesome
+                  {/* <FontAwesome
                     name={'angle-down'}
                     size={w * 0.045}
                     color={pallette.white}
-                  />
+                  /> */}
                 </View>
               </View>
             </TouchableOpacity>

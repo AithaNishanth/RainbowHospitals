@@ -78,5 +78,24 @@ target 'RainbowHospitals' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+    
+    # Fix jitsi-meet-rnsdk script phase to handle missing sounds directory gracefully
+    installer.pods_project.targets.each do |target|
+      if target.name == 'jitsi-meet-rnsdk'
+        target.build_phases.each do |phase|
+          if phase.is_a?(Xcodeproj::Project::Object::PBXShellScriptBuildPhase) && phase.name == 'Copy Sound Files'
+            phase.shell_script = <<~SCRIPT
+              SOURCE_PATH="${PODS_TARGET_SRCROOT}/../sounds/"
+              TARGET_PATH=$(dirname "${CONFIGURATION_BUILD_DIR}")
+              PROJECT_NAME=$(basename $(dirname $(dirname "${PROJECT_DIR}"))).app
+              if [ -d "${SOURCE_PATH}" ] && [ "$(ls -A ${SOURCE_PATH} 2>/dev/null)" ]; then
+                mkdir -p "${TARGET_PATH}/${PROJECT_NAME}"
+                cp -R "${SOURCE_PATH}"* "${TARGET_PATH}/${PROJECT_NAME}/" 2>/dev/null || true
+              fi
+            SCRIPT
+          end
+        end
+      end
+    end
   end
 end

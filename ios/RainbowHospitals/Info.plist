@@ -45,6 +45,12 @@
 	<array>
 		<string>voip</string>
 	</array>
+
+
+
+<key>NSCalendarsUsageDescription</key>
+<string>This app needs calendar access to schedule and manage appointments.</string>
+
 	<key>RTCScreenSharingExtension</key>
 	<string>org.reactjs.native.example.RainbowHospitals</string>
 	<key>UILaunchStoryboardName</key>
